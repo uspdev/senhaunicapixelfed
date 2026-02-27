@@ -1,0 +1,20 @@
+{
+    "name": "uspdev/senhaunicapixelfed",
+    "description": "Pacote simples com rota /loginusp",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Uspdev\\SenhaUnicaPixelfed\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Uspdev\\SenhaUnicaPixelfed\\SenhaUnicaPixelfedServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}
