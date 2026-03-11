@@ -34,13 +34,15 @@ class LoginUspController extends Controller
         //     $data['email'] = strtolower($data['email']);
         // }
 
-        return User::create([
-            'name' => Purify::clean($data['name']),
-            'username' => $data['username'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'app_register_ip' => request()->ip(),
-        ]);
+        return User::firstOrCreate(
+            ['email' => $data['email']],
+            [
+                'name' => Purify::clean($data['name']),
+                'username' => $data['username'],
+                'password' => Hash::make($data['password']),
+                'app_register_ip' => request()->ip(),
+            ]
+        );
     }
 
 
