@@ -13,8 +13,7 @@ use App\Profile;
 use Purify;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
-
-
+use Uspdev\Senhaunica\Senhaunica;
 
 class LoginUspController extends Controller
 {   
@@ -23,7 +22,16 @@ class LoginUspController extends Controller
     protected $redirectTo = '/i/web';
 
     public function index()
-    {
+    {   
+        /*$clientCredentials = [
+            'identifier' => 'identificacao',
+            'secret' => 'chave-secreta',
+            'callback_id' => 0,
+        ];
+
+        Senhaunica::login($clientCredentials);
+        */
+
         return view('senhaunicapixelfed::loginusp');
     }
 
