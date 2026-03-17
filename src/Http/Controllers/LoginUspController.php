@@ -23,14 +23,41 @@ class LoginUspController extends Controller
 
     public function index()
     {   
-        /*$clientCredentials = [
-            'identifier' => 'identificacao',
-            'secret' => 'chave-secreta',
-            'callback_id' => 0,
+        session_start(); // Mlehorar essa parte
+
+        $clientCredentials = [
+            'identifier' => env('SENHAUNICAPIXELFED_KEY'),
+            'secret' => env('SENHAUNICAPIXELFED_SECRET'),
+            'callback_id' => env('SENHAUNICAPIXELFED_CALLBACK_ID'),
         ];
 
+        
+
         Senhaunica::login($clientCredentials);
-        */
+        $user = Senhaunica::getUserDetail();
+
+        $user_db = User::firstOrCreate(
+            ['email' => $user['emailPrincipalUsuario']],
+            [
+                'name' => $user['nomeUsuario'],
+                'username' => $user['loginUsuario'],
+                'password' => Hash::make('123'),
+                'app_register_ip' => request()->ip(),
+            ]
+        );
+
+        event(new Registered($user = $this->create($request->all()
+            + [
+                'password' => Str::random(40),
+                'name' => Str::random(10),
+                'username' => Str::random(5)
+            ]
+        )));
+
+        $this->guard()->login($user);
+
+        return $this->registered($request, $user)
+            ?: redirect($this->redirectPath());
 
         return view('senhaunicapixelfed::loginusp');
     }
