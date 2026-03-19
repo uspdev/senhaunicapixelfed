@@ -47,12 +47,10 @@ class LoginUspController extends Controller
             ]
             
         )));
-
+        
         $this->guard()->login($user_record);
-
+        
         return $this->registered($request, $user_record)
-            ?: redirect($this->redirectPath());
-
-        return view('senhaunicapixelfed::loginusp');
+            ?: redirect()->route('home');
     }
 }
