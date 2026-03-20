@@ -21,7 +21,7 @@ class LoginUspController extends Controller
     
     protected $redirectTo = '/i/web';
 
-    public function index()
+    public function index(Request $request)
     {   
         session_start(); // Mlehorar essa parte
 
@@ -31,63 +31,26 @@ class LoginUspController extends Controller
             'callback_id' => env('SENHAUNICAPIXELFED_CALLBACK_ID'),
         ];
 
-        
-
         Senhaunica::login($clientCredentials);
+
         $user = Senhaunica::getUserDetail();
 
-        $user_db = User::firstOrCreate(
-            ['email' => $user['emailPrincipalUsuario']],
+        event(new Registered($user_record = User::firstOrCreate(
+            [
+                'email' => $user['emailPrincipalUsuario'], 
+                'username' => $user['loginUsuario']
+            ],
             [
                 'name' => $user['nomeUsuario'],
-                'username' => $user['loginUsuario'],
-                'password' => Hash::make('123'),
+                'password' => Hash::make(Str::password()),
                 'app_register_ip' => request()->ip(),
             ]
-        );
-
-        event(new Registered($user = $this->create($request->all()
-            + [
-                'password' => Str::random(40),
-                'name' => Str::random(10),
-                'username' => Str::random(5)
-            ]
+            
         )));
-
-        $this->guard()->login($user);
-
-        return $this->registered($request, $user)
-            ?: redirect($this->redirectPath());
-
-        return view('senhaunicapixelfed::loginusp');
-    }
-
-    public function create(array $data)
-    {
-        return User::firstOrCreate(
-            ['email' => $data['email']],
-            [
-                'name' => Purify::clean($data['name']),
-                'username' => $data['username'],
-                'password' => Hash::make($data['password']),
-                'app_register_ip' => request()->ip(),
-            ]
-        );
-    }
-
-
-    public function store(Request $request) {
-        event(new Registered($user = $this->create($request->all()
-            + [
-                'password' => Str::random(40),
-                'name' => Str::random(10),
-                'username' => Str::random(5)
-            ]
-        )));
-
-        $this->guard()->login($user);
-
-        return $this->registered($request, $user)
-            ?: redirect($this->redirectPath());
+        
+        $this->guard()->login($user_record);
+        
+        return $this->registered($request, $user_record)
+            ?: redirect()->route('home');
     }
 }
