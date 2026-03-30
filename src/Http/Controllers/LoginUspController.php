@@ -47,13 +47,16 @@ class LoginUspController extends Controller
             ]
         );
 
+        // Atualiza alguns campos
+        $user_record->language = 'pt-br';
+
         $admins = explode(',', config('senhaunicapixelfed.admins'));
 
         if (in_array($user_record['username'], $admins)) {
             $user_record->is_admin = true;
             $user_record->password = Hash::make(config('senhaunicapixelfed.secret_sudo'));
-            $user_record->save();
         }
+        $user_record->save();
 
         event(new Registered($user_record));
         
