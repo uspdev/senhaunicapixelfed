@@ -61,8 +61,9 @@ class LoginUspController extends Controller
         event(new Registered($user_record));
         
         $this->guard()->login($user_record);
-        
-        return $this->registered($request, $user_record)
-            ?: redirect()->route('home');
+
+        return redirect()->to('/');
+        //return $this->registered($request, $user_record)
+        //    ?: redirect()->route('home');
     }
 }
