@@ -5,5 +5,5 @@ return [
     'secret' => env('SENHAUNICAPIXELFED_SECRET', 'secret'),
     'callback_id' => env('SENHAUNICAPIXELFED_CALLBACK_ID', 0),
     'admins' => env('SENHAUNICAPIXELFED_ADMINS', 0),
-    'secret_sudo' => env('ENHAUNICAPIXELFED_SECRET_SUDO', 'secret_sudo'),
+    'secret_sudo' => env('SENHAUNICAPIXELFED_SECRET_SUDO', 'secret_sudo'),
 ];
